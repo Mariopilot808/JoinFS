@@ -69,10 +69,11 @@
     <ApplicationIcon>Resources\App.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>joinfs.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>JoinFS.Program</StartupObject>
@@ -1168,7 +1169,6 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\strings.ru.resx" />
-    <None Include="joinfs.pfx" />
     <None Include="Licence.rtf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -1239,9 +1239,9 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <Target Name="AfterBuild">
+  <!--Target Name="AfterBuild">
     <Exec Command="&quot;C:\Program Files (x86)\Microsoft SDKs\ClickOnce\SignTool\signtool.exe&quot; sign /f &quot;$(ProjectDir)joinfs.pfx&quot; /p WSAiwsdj9( &quot;$(TargetPath)&quot;" />
-  </Target>
+  </Target-->
   <PropertyGroup>
     <PostBuildEvent>
     </PostBuildEvent>

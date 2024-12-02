@@ -320,7 +320,7 @@
     </None>
   </ItemGroup>
 
-	<Target Name="AfterBuild">
+	<!--Target Name="AfterBuild">
 		<Exec Command="&quot;C:\Program Files (x86)\Microsoft SDKs\ClickOnce\SignTool\signtool.exe&quot; sign /f &quot;$(ProjectDir)joinfs.pfx&quot; /p WSAiwsdj9( &quot;$(TargetPath)&quot;" />
-	</Target>
+	</Target-->
 </Project>

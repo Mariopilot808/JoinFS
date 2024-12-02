@@ -54,8 +54,7 @@
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
   <PropertyGroup>
-    <PostBuildEvent>"C:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\Bin\signtool.exe" sign /f "$(SolutionDir)joinfs.pfx" /p WSAiwsdj9( "!(TargetPath)"
-"$(SolutionDir)FileVersion.exe" "$(SolutionDir)\FSX\bin\$(Configuration)\$(TargetName).exe" "!(TargetPath)"</PostBuildEvent>
+    <PostBuildEvent />
   </PropertyGroup>
   <!--
 	To modify your build process, add your task inside one of the targets below and uncomment it.
