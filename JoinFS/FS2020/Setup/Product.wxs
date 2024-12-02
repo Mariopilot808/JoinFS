@@ -17,6 +17,10 @@
     <WixVariable Id="WixUILicenseRtf" Value="$(var.JoinFS-FS2020.TargetDir)Licence.rtf" />
     <WixVariable Id="WixUIInfoIco" Value="$(var.JoinFS-FS2020.ProjectDir)App.ico" />
 
+	<Property Id="MYDOCUMENTSFOLDER">
+		<RegistrySearch Id="MyDocumentsSearch" Root="HKCU" Type="directory" Name="Personal" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" />
+	</Property>
+	  
     <Condition Message=".NET Framework 4.0 required.">
       <![CDATA[Installed OR NETFRAMEWORK40FULL]]>
     </Condition>
@@ -39,6 +43,10 @@
       </Directory>
       <Directory Id="DesktopFolder" Name="Desktop">
       </Directory>
+	  <Directory Id="MYDOCUMENTSFOLDER" SourceName="User's Personal Data Folder">
+		<Directory Id="Docs_JoinFSFS2020" Name="JoinFS-FS2020">
+		</Directory>
+	  </Directory>
     </Directory>
 
     <DirectoryRef Id="ApplicationProgramsFolder">
@@ -61,25 +69,31 @@
       </Component>
     </DirectoryRef>
 
-    <ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
-      <Component Id="AppSimconnect" Guid="879AE3D9-ED7C-437E-A3F2-6B0A378BADAF">
+    <ComponentGroup Id="ProductComponents">
+      <Component Id="AppSimconnect" Guid="879AE3D9-ED7C-437E-A3F2-6B0A378BADAF" Directory="INSTALLFOLDER">
         <File Id="AppSimconnect" Name="Microsoft.FlightSimulator.SimConnect.dll" Source="$(var.JoinFS_TargetDir)Microsoft.FlightSimulator.SimConnect.dll" KeyPath="yes" Assembly=".net" AssemblyApplication="AppExe" />
       </Component>
-      <Component Id="AppSimconnectDll" Guid="A05A3081-587A-4D4B-8FAD-260C0CEDAC65">
+      <Component Id="AppSimconnectDll" Guid="A05A3081-587A-4D4B-8FAD-260C0CEDAC65" Directory="INSTALLFOLDER">
         <File Id="AppSimconnectDll" Name="SimConnect.dll" Source="$(var.JoinFS_TargetDir)SimConnect.dll" KeyPath="yes" />
       </Component>
-      <Component Id="AppExe" Guid="D7FC4806-0754-4990-96D1-3124E4894A6E">
+      <Component Id="AppExe" Guid="D7FC4806-0754-4990-96D1-3124E4894A6E" Directory="INSTALLFOLDER">
         <File Id="AppExe" Name="JoinFS-FS2020.exe" Source="$(var.JoinFS_TargetDir)JoinFS-FS2020.exe" KeyPath="yes" Checksum="yes" />
       </Component>
-      <Component Id="AppConfig" Guid="986F58FB-DAF8-434B-9FE7-69FBE4A7021B">
+      <Component Id="AppConfig" Guid="986F58FB-DAF8-434B-9FE7-69FBE4A7021B" Directory="INSTALLFOLDER">
         <File Id="AppConfig" Name="JoinFS-FS2020.exe.config" Source="$(var.JoinFS_TargetDir)JoinFS-FS2020.exe.config" KeyPath="yes" />
       </Component>
-      <Component Id="AppLicence" Guid="D0050C14-1164-439C-8A20-18F0E1EA26CC">
+      <Component Id="AppLicence" Guid="D0050C14-1164-439C-8A20-18F0E1EA26CC" Directory="INSTALLFOLDER">
         <File Id="AppLicence" Name="Licence.rtf" Source="$(var.JoinFS_TargetDir)Licence.rtf" KeyPath="yes" />
       </Component>
-    </ComponentGroup>
-
-    <DirectoryRef Id="FRENCHFOLDER">
+	  <Component Id="AppAddons2020" Guid="F01395F7-665D-1548-C565-AB8376CD74F0" Directory="Docs_JoinFSFS2020">
+		<File Id="AppAddons2020" Name="Addons - Microsoft Flight Simulator 2020.txt" Source="$(var.JoinFS_TargetDir)Addons - Microsoft Flight Simulator 2020.txt" KeyPath="yes"/>
+	  </Component>
+	  <Component Id="AppAddons2024" Guid="3BF06B46-23D8-405A-9518-26A4B44EEA42" Directory="Docs_JoinFSFS2020">
+		<File Id="AppAddons2024" Name="Addons - Microsoft Flight Simulator 2024.txt" Source="$(var.JoinFS_TargetDir)Addons - Microsoft Flight Simulator 2024.txt" KeyPath="yes"/>
+	  </Component>
+	</ComponentGroup>
+	  
+	<DirectoryRef Id="FRENCHFOLDER">
       <Component Id="FrenchResource" Guid="13720024-01E6-4950-8919-8D81891DAB1A">
         <File Id="FrenchResource" Name="JoinFS-FS2020.resources.dll" Source="$(var.JoinFS_TargetDir)fr\JoinFS-FS2020.resources.dll" KeyPath="yes" />
       </Component>
