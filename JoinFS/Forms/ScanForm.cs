@@ -194,12 +194,64 @@ namespace JoinFS
             Text_Folder.Text = initialFolder;
 
             // check for MSFS2020
-            if (simulatorName == "Microsoft Flight Simulator 2020")
+            if ((simulatorName == "Microsoft Flight Simulator 2020") || (simulatorName == "Microsoft Flight Simulator 2024"))
             {
                 // change message
                 Label_Specify.Text = "Please specify the 'Flight Simulator Packages' folder:";
 
                 // addons
+
+                try
+                {
+                    //addons file
+                    //string ScanstrExeFilePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
+                    //string ScanstrWorkPath = System.IO.Path.GetDirectoryName(ScanstrExeFilePath);
+                    string ScanAddonsfilename = Path.Combine(main.documentsPath, "Addons - Microsoft Flight Simulator 2020.txt");
+                    if (simulatorName == "Microsoft Flight Simulator 2024")
+                    {
+                        ScanAddonsfilename = Path.Combine(main.documentsPath, "Addons - Microsoft Flight Simulator 2024.txt");
+                    }
+
+                    // check for models file
+                    if (File.Exists(ScanAddonsfilename))
+                    {
+                        // read all models from file
+                        string[] Scanlines = File.ReadAllLines(ScanAddonsfilename);
+                        // for all lines
+
+                        string Scancurraddon = "";
+                        string Scanlastaddon = "";
+                        int Scannaddons = 0;
+                        foreach (string Scanline in Scanlines)
+                        {
+                            string[] Scanparts = Scanline.Split('|');
+                            //count addons and split lines
+                            Scanlastaddon = Scanparts[0];
+                            if (Scancurraddon != Scanlastaddon)
+                            {
+                                Scannaddons++;
+                                addOns.Add(Scanlastaddon);
+                            }
+                            // refresh current
+                            Scancurraddon = Scanlastaddon;
+                            // check that model is not already present
+                            //if (ModelExists(parts[1]) == false)
+                            {
+                            }
+                        }
+
+                        // message
+                        main.MonitorEvent("Loaded " + addOns.Count + " AddOns");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    main.ShowMessage(ex.Message);
+                }
+
+
+
+                /*
                 addOns.Add("Asobo Standard");
                 addOns.Add("Asobo Deluxe");
                 addOns.Add("Asobo Premium");
@@ -230,6 +282,9 @@ namespace JoinFS
                 addOns.Add("Lockheed C-130E");
                 addOns.Add("Beechcraft D18S");
                 addOns.Add("Beechcraft V35B");
+                addOns.Add("MND C-22J Ventura");
+                */
+
                 // addons selected
                 addOnsSelected = new bool[addOns.Count];
                 // for each addon

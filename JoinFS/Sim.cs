@@ -4446,7 +4446,10 @@ namespace JoinFS
             {
                 name = "Microsoft Flight Simulator 2020";
             }
-
+            if (name == "SunRise")
+            {
+                name = "Microsoft Flight Simulator 2024";
+            }
             // show messages
             main.MonitorEvent("Connected to simulator");
             main.MonitorEvent("SimConnect '" + simVerMaj.ToString() + "." + simVerMin.ToString() + "." + simBuiMaj.ToString() + "." + simBuiMin.ToString() + "'");

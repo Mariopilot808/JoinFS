@@ -6,6 +6,9 @@ using System.Windows.Forms;
 using System.IO;
 using System.Globalization;
 using JoinFS.Properties;
+#if FS2020
+using System.Linq;
+#endif
 
 namespace JoinFS
 {
@@ -50,14 +53,14 @@ namespace JoinFS
         /// <summary>
         /// Type role for a model
         /// </summary>
-        public const int TypeRole_SingleProp    = 1;
-        public const int TypeRole_TwinProp      = 2;
-        public const int TypeRole_Airliner      = 3;
-        public const int TypeRole_Rotorcraft    = 4;
-        public const int TypeRole_Glider        = 5;
-        public const int TypeRole_Fighter       = 6;
-        public const int TypeRole_Bomber        = 7;
-        public const int TypeRole_FourProp      = 8;
+        public const int TypeRole_SingleProp = 1;
+        public const int TypeRole_TwinProp = 2;
+        public const int TypeRole_Airliner = 3;
+        public const int TypeRole_Rotorcraft = 4;
+        public const int TypeRole_Glider = 5;
+        public const int TypeRole_Fighter = 6;
+        public const int TypeRole_Bomber = 7;
+        public const int TypeRole_FourProp = 8;
 
         /// <summary>
         /// type roles names
@@ -579,7 +582,7 @@ namespace JoinFS
                     List<string> scanFolders = new List<string>();
 
                     // MSF
-                    if (main.sim.GetSimulatorName() == "Microsoft Flight Simulator 2020")
+                    if ((main.sim.GetSimulatorName() == "Microsoft Flight Simulator 2020") || (main.sim.GetSimulatorName() == "Microsoft Flight Simulator 2024"))
                     {
                         // add folder to list
                         scanFolders.Add(simFolder);
@@ -787,7 +790,7 @@ namespace JoinFS
                                 // search for all aircraft.cfg in SimObjects
                                 SearchForFiles(folder, "aircraft.cfg", pathList, 0);
                                 // not for MSF
-                                if (main.sim.GetSimulatorName() != "Microsoft Flight Simulator 2020")
+                                if ((main.sim.GetSimulatorName() != "Microsoft Flight Simulator 2020") && (main.sim.GetSimulatorName() != "Microsoft Flight Simulator 2024"))
                                 {
                                     // search for all sim.cfg in Rotorcraft
                                     SearchForFiles(folder, "sim.cfg", pathList, 0);
@@ -896,8 +899,64 @@ namespace JoinFS
                     }
 
                     // check for MSFS2020
-                    if (main.sim.GetSimulatorName() == "Microsoft Flight Simulator 2020")
+                    if ((main.sim.GetSimulatorName() == "Microsoft Flight Simulator 2020") || (main.sim.GetSimulatorName() == "Microsoft Flight Simulator 2024"))
                     {
+
+                        try
+                        {
+                            //addons file
+                            //string strExeFilePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
+                            //string strWorkPath = System.IO.Path.GetDirectoryName(strExeFilePath);
+                            //string Addonsfilename = strWorkPath + Path.DirectorySeparatorChar + "Addons - Microsoft Flight Simulator 2020.txt";
+                            string Addonsfilename = Path.Combine(main.documentsPath, "Addons - Microsoft Flight Simulator 2020.txt");
+                            if (main.sim.GetSimulatorName() == "Microsoft Flight Simulator 2024")
+                            {
+                                Addonsfilename = Path.Combine(main.documentsPath, "Addons - Microsoft Flight Simulator 2024.txt");
+                            }
+
+                            // check for models file
+                            if (File.Exists(Addonsfilename))
+                            {
+                                // read all models from file
+                                string[] lines = File.ReadAllLines(Addonsfilename);
+                                // for all lines
+
+                                string lastaddon = "";
+                                int AddOnnmodels = 0;
+                                foreach (string line in lines)
+                                {
+                                    string[] parts = line.Split('|');
+                                    //count addons and split lines
+                                    lastaddon = parts[0];
+                                    bool ThisAddonSelected = initialAddOns.Contains(lastaddon);
+                                    
+                                    // check that model is not already present
+                                    if (ModelExists(parts[1]) == false && ThisAddonSelected)
+                                    {
+                                        SubmitModel(parts[1], parts[2], parts[3], parts[4], 0, parts[6]);
+                                        AddOnnmodels++;
+                                    }
+                                }
+
+                                // message
+                                main.MonitorEvent("Loaded " + AddOnnmodels + " AddOn Models");
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            main.ShowMessage(ex.Message);
+                        }
+
+
+
+
+
+
+
+
+
+
+                        /*
                         // check for initial addons
                         if (initialAddOns.Length > 0)
                         {
@@ -1275,8 +1334,16 @@ namespace JoinFS
                                     SubmitModel("Beechcraft V35B Aviators Club Livery", "Carenado", "Beechcraft V35B Bonanza", "Aviators Club Livery", 0, "SingleProp");
                                     SubmitModel("Beechcraft V35B Bonanza Xbox Aviators Club Livery", "Carenado", "Beechcraft V35B Bonanza", "Xbox Aviators Club Livery", 0, "SingleProp");
                                 }
+                                else if (addOn == "MND C-22J Ventura")
+                                {
+                                    SubmitModel("Caproni-Vizzola C-22J I-CAVT", "Caproni-Vizzola", "C-22J Ventura", "I-CAVT", 0, "TwinTurbine");
+                                    SubmitModel("Caproni-Vizzola I-GIAC RGB", "Caproni-Vizzola", "C-22J Ventura", "I-GIAC (Red, Gray, Black)", 0, "TwinTurbine");
+                                    SubmitModel("Caproni-Vizzola C-22J I-GIAC Red", "Caproni-Vizzola", "C-22J Ventura", "I-GIAC (Red, White)", 0, "TwinTurbine");
+                                    SubmitModel("Caproni-Vizzola C-22J I-GIAC White", "Caproni-Vizzola", "C-22J Ventura", "I-GIAC (White, Torquoise)", 0, "TwinTurbine");
+                                    SubmitModel("Caproni-Vizzola C-22J I-CAVJ", "Caproni-Vizzola", "C-22J Ventura", "I-CAVJ (Camouflage)", 0, "TwinTurbine");
+                                }
                             }
-                        }
+                        } */
                     }
 #endif
 
@@ -1327,8 +1394,8 @@ namespace JoinFS
                 ScanForm scanForm = new ScanForm(main, simFolder, initialScanFolders, initialAddOns, initialAdditionals);
 #endif
 
-            // open dialog
-            switch (scanForm.ShowDialog())
+                // open dialog
+                switch (scanForm.ShowDialog())
                 {
                     case System.Windows.Forms.DialogResult.OK:
                         {
@@ -1439,7 +1506,7 @@ namespace JoinFS
         /// <summary>
         /// List of model prefixes
         /// </summary>
-        Dictionary<string, string> prefixList = new Dictionary<string,string>();
+        Dictionary<string, string> prefixList = new Dictionary<string, string>();
 
         /// <summary>
         /// Make a list of model prefix strings
@@ -1450,7 +1517,11 @@ namespace JoinFS
             prefixList.Clear();
 
             // for each model
+#if FS2020
+            foreach (var model in models.ToList())
+#else
             foreach (var model in models)
+#endif
             {
                 // for each prefix length
                 for (int length = 4; length <= model.title.Length; length++)
@@ -1721,8 +1792,8 @@ namespace JoinFS
 
             // refresh
 #if !SERVER && !CONSOLE
-            main.matchingForm ?. refresher.Schedule();
-            main.aircraftForm ?. refresher.Schedule(3);
+            main.matchingForm?.refresher.Schedule();
+            main.aircraftForm?.refresher.Schedule(3);
 #endif
 
             // choose defaults
@@ -1774,7 +1845,7 @@ namespace JoinFS
 
 #if !SERVER && !CONSOLE
             // refresh
-            main.matchingForm ?. refresher.Schedule();
+            main.matchingForm?.refresher.Schedule();
 #endif
         }
 
@@ -1814,7 +1885,7 @@ namespace JoinFS
                                 // get info
                                 string modelTitle = parts[0].TrimStart(' ').TrimEnd(' ');
                                 string subTitle = parts[1].TrimStart(' ').TrimEnd(' ');
-                                
+
                                 // find sub model
                                 Model model = GetModel(subTitle);
                                 if (model != null)
@@ -1850,7 +1921,7 @@ namespace JoinFS
 
 #if !SERVER && !CONSOLE
             // refresh
-            main.aircraftForm ?. refresher.Schedule(3);
+            main.aircraftForm?.refresher.Schedule(3);
 #endif
         }
 
@@ -1966,7 +2037,7 @@ namespace JoinFS
 
 #if !SERVER && !CONSOLE
             // refresh
-            main.aircraftForm ?. refresher.Schedule(3);
+            main.aircraftForm?.refresher.Schedule(3);
 #endif
         }
 
@@ -2157,8 +2228,8 @@ namespace JoinFS
             callsigns.Clear();
 
 #if !SERVER && !CONSOLE
-            main.matchingForm ?. refresher.Schedule();
-            main.aircraftForm ?. refresher.Schedule();
+            main.matchingForm?.refresher.Schedule();
+            main.aircraftForm?.refresher.Schedule();
 #endif
         }
 
@@ -2235,7 +2306,7 @@ namespace JoinFS
 
 #if !SERVER && !CONSOLE
             // refresh
-            main.aircraftForm ?. refresher.Schedule();
+            main.aircraftForm?.refresher.Schedule();
 #endif
         }
 
@@ -2272,7 +2343,7 @@ namespace JoinFS
 
             // refresh
 #if !SERVER && !CONSOLE
-            main.aircraftForm ?. refresher.Schedule();
+            main.aircraftForm?.refresher.Schedule();
 #endif
         }
 
@@ -2305,9 +2376,9 @@ namespace JoinFS
                                     matches[substitutionForm.GetReplaceModel()] = model;
                                     main.ScheduleSubstitutionSave();
                                     // remove aircraft using the selected model
-                                    main.sim ?. ScheduleRemoveModel(substitutionForm.GetReplaceModel());
+                                    main.sim?.ScheduleRemoveModel(substitutionForm.GetReplaceModel());
                                     // refresh
-                                    main.aircraftForm ?. refresher.Schedule(2);
+                                    main.aircraftForm?.refresher.Schedule(2);
                                 }
                             }
                             return true;
@@ -2319,9 +2390,9 @@ namespace JoinFS
                                 matches.Remove(modelTitle);
                                 main.ScheduleSubstitutionSave();
                                 // remove aircraft using the selected model
-                                main.sim ?. ScheduleRemoveModel(modelTitle);
+                                main.sim?.ScheduleRemoveModel(modelTitle);
                                 // refresh
-                                main.aircraftForm ?. refresher.Schedule(2);
+                                main.aircraftForm?.refresher.Schedule(2);
                             }
                             return true;
                     }
