@@ -1185,7 +1185,8 @@
   </Target>
   <PropertyGroup>
     <PostBuildEvent>copy "$(ProjectDir)FS2020\SimConnect.dll" "$(TargetDir)"
-
+copy "$(ProjectDir)..\MSFS24_Aircraft_DATA\Addons - Microsoft Flight Simulator 2020.txt" "$(TargetDir)"
+copy "$(ProjectDir)..\MSFS24_Aircraft_DATA\Addons - Microsoft Flight Simulator 2024.txt" "$(TargetDir)"
 </PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
