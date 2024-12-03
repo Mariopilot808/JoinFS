@@ -85,10 +85,10 @@
       <Component Id="AppLicence" Guid="D0050C14-1164-439C-8A20-18F0E1EA26CC" Directory="INSTALLFOLDER">
         <File Id="AppLicence" Name="Licence.rtf" Source="$(var.JoinFS_TargetDir)Licence.rtf" KeyPath="yes" />
       </Component>
-	  <Component Id="AppAddons2020" Guid="F01395F7-665D-1548-C565-AB8376CD74F0" Directory="Docs_JoinFSFS2020">
+	  <Component Id="AppAddons2020" Guid="F01395F7-665D-1548-C565-AB8376CD74F0" Directory="Docs_JoinFSFS2020" NeverOverwrite="yes">
 		<File Id="AppAddons2020" Name="Addons - Microsoft Flight Simulator 2020.txt" Source="$(var.JoinFS_TargetDir)Addons - Microsoft Flight Simulator 2020.txt" KeyPath="yes"/>
 	  </Component>
-	  <Component Id="AppAddons2024" Guid="3BF06B46-23D8-405A-9518-26A4B44EEA42" Directory="Docs_JoinFSFS2020">
+	  <Component Id="AppAddons2024" Guid="3BF06B46-23D8-405A-9518-26A4B44EEA42" Directory="Docs_JoinFSFS2020" NeverOverwrite="yes">
 		<File Id="AppAddons2024" Name="Addons - Microsoft Flight Simulator 2024.txt" Source="$(var.JoinFS_TargetDir)Addons - Microsoft Flight Simulator 2024.txt" KeyPath="yes"/>
 	  </Component>
 	</ComponentGroup>
